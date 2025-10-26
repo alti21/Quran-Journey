@@ -22,6 +22,11 @@ type Glyph = {
   v1_page?: number;
 };
 
+type Reflection = {
+  resource_id: number;
+  text: string;
+};
+
 export function loadQCFPageFont(page: number) {
   if (!page) return;
 
@@ -49,6 +54,7 @@ export default function SurahPage() {
   const { id } = useParams();
   const [surah, setSurah] = useState<Surah>({});
   const [glyphs, setGlyphs] = useState<Glyph[]>([]);
+  const [translation, setTranslation] = useState<Reflection[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,6 +64,8 @@ export default function SurahPage() {
         setSurah(res.data.chapter);
         const glyphsRes = await axios.get(`/api/quran/verses/code_v1?chapter_number=${id}`);
         setGlyphs(glyphsRes.data.verses);
+        const translationRes = await axios.get(`/api/quran/verses/translations/85?chapter_number=${id}`);
+        setTranslation(translationRes.data.translations);
       } catch (err: any) {
         console.error(err);
         setError(err.message);
@@ -120,17 +128,20 @@ export default function SurahPage() {
         )}
 
         {/* Verses */}
-        <div className="space-y-8 text-right">
-          {glyphs.map((glyph) => (
+        <div className="space-y-8">
+          {glyphs.map((glyph, index) => (
             <div
               key={glyph.id}
               className="border-b border-gray-100 pb-6 last:border-none"
             >
               <p
-                className="text-4xl md:text-5xl leading-relaxed text-emerald-900 font-arabic"
+                className="text-4xl md:text-5xl leading-relaxed text-emerald-900 font-arabic text-right"
                 style={{ fontFamily: loadQCFPageFont(glyph.v1_page ?? 2) }}
               >
                 {glyph.code_v1}
+              </p>
+              <p className="text-2xl md:text-2xl leading-relaxed text-emerald-900">
+                {translation[index]?.text}
               </p>
             </div>
           ))}
