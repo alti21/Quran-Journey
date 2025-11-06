@@ -1,15 +1,13 @@
-"use client";
-
 type Surah = {
-  id?: number;
-  name_simple?: string;
-  name_arabic?: string;
-  revelation_place?: string;
-  verses_count?: number;
-  translated_name?: { name: string } | null;
+  id: number;
+  name_simple: string;
+  name_arabic: string;
+  revelation_place: string;
+  verses_count: number;
+  translated_name: { name: string };
 };
 
-export default function SurahHeader({ surah }: { surah: Surah }) {
+function SurahHeader({ surah }: { surah: Surah | null }) {
   if (!surah) return null;
 
   return (
@@ -23,7 +21,7 @@ export default function SurahHeader({ surah }: { surah: Surah }) {
       </h1>
 
       <p className="text-gray-600 italic">
-        {surah.translated_name?.name}
+        {surah.translated_name.name}
       </p>
 
       <p className="text-sm text-gray-500 mt-2">
@@ -34,3 +32,5 @@ export default function SurahHeader({ surah }: { surah: Surah }) {
     </div>
   );
 }
+
+export default SurahHeader;

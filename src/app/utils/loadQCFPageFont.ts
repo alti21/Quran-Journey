@@ -1,5 +1,5 @@
 export default function loadQCFPageFont(page: number | undefined) {
-  if (!page) return;
+  if (!page) return "";
 
   const fontName = `p${page}-v1`;
 
