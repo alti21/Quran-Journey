@@ -1,28 +1,44 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useCallback } from "react";
+
+type SavedReflection = {
+  date: string;
+  verseKey: string;
+  verse: string;
+  userReflection: string;
+};
 
 type Props = {
-  savedReflections: any[];
+  savedReflections: SavedReflection[];
   onClose: () => void;
   onDelete: (i: number) => void;
-}
+};
 
-export default function ReflectionModal({ savedReflections, onClose, onDelete }: Props) {
+function ReflectionModal({ savedReflections, onClose, onDelete }: Props) {
   return (
     <AnimatePresence>
       <motion.div
+        key="backdrop"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
       >
         <motion.div
+          key="modal"
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
+          role="dialog"
+          aria-modal="true"
           className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-6 relative"
         >  
-          <button onClick={() => onClose()} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl">
+          <button 
+            onClick={() => onClose()}
+            aria-label="Close"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl"
+          >
             ✕
           </button>
 
@@ -35,7 +51,10 @@ export default function ReflectionModal({ savedReflections, onClose, onDelete }:
           ) : (
             <ul className="space-y-4 max-h-[60vh] overflow-y-auto">
               {savedReflections.map((item, index) => (
-                <li key={index} className="border border-emerald-100 rounded-lg p-4 bg-emerald-50/40 hover:bg-emerald-50 transition">
+                <li
+                  key={index}
+                  className="border border-emerald-100 rounded-xl p-4 bg-emerald-50/40 hover:bg-emerald-50 transition"
+                >
                   <div className="flex justify-between items-center mb-2">
                     <p className="text-sm text-gray-500 italic">
                       {new Date(item.date).toLocaleDateString()} • Verse {item.verseKey}
@@ -55,3 +74,5 @@ export default function ReflectionModal({ savedReflections, onClose, onDelete }:
     </AnimatePresence>
   );
 }
+
+export default ReflectionModal;

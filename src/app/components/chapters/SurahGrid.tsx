@@ -1,6 +1,15 @@
 import SurahCard from "./SurahCard";
 
-export default function SurahGrid({ chapters }: { chapters: any[] }) {
+type Chapter = {
+  id: number;
+  name_simple: string;
+  name_arabic: string;
+  revelation_place: string;
+  verses_count: number;
+  translated_name: { name: string };
+};
+
+function SurahGrid({ chapters }: { chapters: Chapter[] }) {
   return (
     <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {chapters.map((surah) => (
@@ -17,3 +26,5 @@ export default function SurahGrid({ chapters }: { chapters: any[] }) {
     </ul>
   );
 }
+
+export default SurahGrid;

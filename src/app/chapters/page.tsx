@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Error from "@/app/components/utils/Error";
 import ReflectionModal from "@/app/components/chapters/ReflectionModal";
@@ -18,10 +18,10 @@ type Chapter = {
 };
 
 type ReflectionVerse = {
-  verse_key?: string;
-  verseText?: string;
-  translation?: string;
-  reflectionPrompt?: string;
+  verse_key: string;
+  verseText: string;
+  translation: string;
+  reflectionPrompt: string;
 };
 
 type SavedReflection = {
@@ -41,13 +41,11 @@ export default function ChaptersPage() {
   const [showModal, setShowModal] = useState(false);
   const [savedReflections, setSavedReflections] = useState<SavedReflection[]>([]);
 
-  const handleDeleteReflection = (index: number) => {
-    if (!window.confirm("Are you sure you want to delete this reflection?")) return;
-    const updated = [...savedReflections];
-    updated.splice(index, 1);
-    localStorage.setItem("reflections", JSON.stringify(updated));
-    setSavedReflections(updated);
-  };
+  // Load saved reflections from localStorage
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("reflections") || "[]");
+    setSavedReflections(stored);
+  }, []);
 
   // Fetch surahs and reflection
   useEffect(() => {
@@ -57,28 +55,23 @@ export default function ChaptersPage() {
           axios.get("/api/quran/chapters"),
           axios.get("/api/quran/reflection"),
         ]);
+
         setChapters(chaptersRes.data.chapters || []);
         setReflectionVerse(verseRes.data);
       } catch (error: any) {
-        console.error(error);
-        setError(
-          error.response?.data?.error || error.message || "Failed to fetch data"
-        );
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-
-    // Load reflections from localStorage
-    const stored = JSON.parse(localStorage.getItem("reflections") || "[]");
-    setSavedReflections(stored);
   }, []);
 
-  const handleSave = () => {
+  // Save reflection
+  const handleSave = useCallback(() => {
     if (!reflectionVerse) return;
 
-    const newReflection = {
+    const newReflection: SavedReflection = {
       date: new Date().toISOString(),
       verseKey: reflectionVerse.verse_key || "Unknown",
       verse: reflectionVerse.translation || "",
@@ -90,7 +83,15 @@ export default function ChaptersPage() {
     setSavedReflections(updated);
     setSaved(true);
     setReflection("");
-  };
+  }, [reflection, reflectionVerse, savedReflections]);
+
+  const handleDeleteReflection = useCallback((index: number) => {
+    if (!window.confirm("Delete this reflection?")) return;
+
+    const updated = savedReflections.filter((_, i) => i !== index);
+    localStorage.setItem("reflections", JSON.stringify(updated));
+    setSavedReflections(updated);
+  }, [savedReflections]);
 
   if (loading)
     return (
@@ -99,8 +100,7 @@ export default function ChaptersPage() {
       </div>
     );
 
-  if (error)
-    <Error error={error} />;
+  if (error) return <Error error={error} />;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-6 py-10 flex flex-col items-center">
