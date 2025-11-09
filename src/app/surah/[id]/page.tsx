@@ -9,7 +9,9 @@ import Verse from "@/app/components/surah/Verse";
 import NavButton from "@/app/components/utils/NavButton";
 import Error from "@/app/components/utils/Error";
 import loadQCFPageFont from "@/app/utils/loadQCFPageFont";
+import LoadingScreen from "@/app/components/utils/LoadingScreen";
 import type { Surah, Glyph, Translation } from "@/types/quran";
+
 
 export default function SurahPage() {
   const { id } = useParams();
@@ -45,12 +47,7 @@ export default function SurahPage() {
 
   if (error) return <Error error={error} />
   
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-emerald-50 to-white">
-        <p className="animate-pulse text-emerald-700 text-lg">Loading surah…</p>
-      </div>
-    );
+  if (loading) return <LoadingScreen text="surah" />
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white flex flex-col items-center px-6 py-10">

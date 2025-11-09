@@ -7,6 +7,7 @@ import ReflectionModal from "@/app/components/chapters/ReflectionModal";
 import ReflectionSection from "../components/chapters/ReflectionSection";
 import AppHeader from "../components/chapters/AppHeader";
 import SurahGrid from "../components/chapters/SurahGrid";
+import LoadingScreen from "@/app/components/utils/LoadingScreen";
 import type { Surah, ReflectionVerse, SavedReflection } from "@/types/quran";
 
 export default function ChaptersPage() {
@@ -71,14 +72,9 @@ export default function ChaptersPage() {
     setSavedReflections(updated);
   }, [savedReflections]);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-emerald-50 to-white">
-        <p className="animate-pulse text-emerald-700 text-lg">Loading chapters…</p>
-      </div>
-    );
-
   if (error) return <Error error={error} />;
+
+  if (loading) return <LoadingScreen text="surahs and reflections" />
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white px-6 py-10 flex flex-col items-center">
