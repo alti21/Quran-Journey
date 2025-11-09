@@ -1,34 +1,45 @@
 import axios from "axios";
 
-// Fetch Uthmani verses for a given chapter number
-export async function GET(  request: Request, { params }: { params: { translation_id: string } }) {
-  const { searchParams } = new URL(request.url);
-  const chapter_number = searchParams.get("chapter_number");
+type Translation = {
+  resource_id: number;
+  text: string;
+};
 
-  const { translation_id } = params;
+type TranslationResponse = {
+  translations: Translation[];
+}
+
+/**
+* Fetch traslations for translation ID 85
+*/
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const chapterNumber = searchParams.get("chapter_number");
+
+  if (!chapterNumber) {
+    return new Response("Missing chapter_number query param", { status: 400 });
+  }
 
   try {
     const tokenRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/quran/token`);
     if (!tokenRes.ok) throw new Error("Failed to get access token");
+    
     const { access_token } = await tokenRes.json();
 
-
-    const response = await axios({
-      method: 'get',
-      url: `${process.env.API_BASE_URL}/quran/translations/85`,
-      params: {
-        chapter_number
-      },
-      headers: {
-        'Accept': 'application/json', 
-        "x-auth-token": access_token,
-        "x-client-id": process.env.CLIENT_ID,
-      },
-    });
+    const response = await axios.get<TranslationResponse>(
+      `${process.env.API_BASE_URL}/quran/translations/85`,
+      {
+        params: { chapter_number: chapterNumber },
+        headers: {
+          "x-auth-token": access_token,
+          "x-client-id": process.env.CLIENT_ID,
+        },
+      }
+    );
 
     return Response.json(response.data);
-  } catch (err: any) {
-    console.error("Verses fetch error:", err.response?.data || err.message);
-    return new Response("Failed to fetch Uthmani verses", { status: 500 });
+  } catch (error: any) {
+    console.error("Translation fetch error:", error.message);
+    return new Response("Failed to fetch translation", { status: 500 });
   }
 }

@@ -46,8 +46,8 @@ export default function SurahPage() {
       try {
         const [surahRes, glyphsRes, translationRes] = await Promise.all([
           axios.get(`/api/quran/surah/${id}`),
-          axios.get(`/api/quran/verses/code_v1?chapter_number=${id}`),
-          axios.get(`/api/quran/verses/translations/85?chapter_number=${id}`),
+          axios.get(`/api/quran/verses/code_v1`, { params: { chapter_number: id } }),
+          axios.get(`/api/quran/verses/translations/85`, { params: { chapter_number: id } }),
         ]);
 
         setSurah(surahRes.data.chapter);
