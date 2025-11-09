@@ -1,11 +1,4 @@
-type Surah = {
-  id: number;
-  name_simple: string;
-  name_arabic: string;
-  revelation_place: string;
-  verses_count: number;
-  translated_name: { name: string };
-};
+import { Surah } from '@/types/quran';
 
 function SurahHeader({ surah }: { surah: Surah | null }) {
   if (!surah) return null;

@@ -1,11 +1,5 @@
 import React, { memo } from "react";
-
-type ReflectionVerse = {
-  verse_key: string;
-  verseText: string;
-  translation: string;
-  reflectionPrompt: string;
-};
+import { ReflectionVerse } from "@/types/quran";
 
 type Props = {
   reflectionVerse: ReflectionVerse;

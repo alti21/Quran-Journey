@@ -1,17 +1,5 @@
 import axios from 'axios';
-
-export type Chapter = {
-  id: number;
-  name_simple: string;
-  name_arabic: string;
-  revelation_place: string;
-  verses_count: number;
-  translated_name: { name: string };
-};
-
-type ChaptersResponse = {
-  chapters: Chapter[];
-};
+import type { Surah } from "@/types/quran";
 
 /**
 * Fetch all surahs
@@ -22,7 +10,7 @@ export async function GET() {
     if (!tokenRes.ok) throw new Error("Failed to get access token");
     const { access_token } = await tokenRes.json();
 
-    const response = await axios.get<ChaptersResponse>(
+    const response = await axios.get<Surah[]>(
       `${process.env.API_BASE_URL}/chapters`,
       {
         headers: {

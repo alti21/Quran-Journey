@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TokenResponse } from "@/types/quran";
 
 /**
 * Fetch oauth token
@@ -14,7 +15,7 @@ export async function GET() {
 
     const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
 
-    const response = await axios.post(
+    const response = await axios.post<TokenResponse>(
       `${OAUTH_BASE_URL}/oauth2/token`,
       'grant_type=client_credentials&scope=content',
       {

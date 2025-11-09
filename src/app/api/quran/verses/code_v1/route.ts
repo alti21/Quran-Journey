@@ -1,15 +1,5 @@
 import axios from "axios";
-
-type Glyph = {
-  id: number;
-  verse_key: string;
-  code_v1: string;
-  v1_page: number;
-};
-
-type GlyphsResponse = {
-  verses: Glyph[];
-};
+import type { Glyph } from "@/types/quran";
 
 /**
 * Fetch v1 Glyphs for a given chapter number
@@ -27,7 +17,7 @@ export async function GET(request: Request) {
     if (!tokenRes.ok) throw new Error("Failed to get access token");
     const { access_token } = await tokenRes.json();
 
-    const response = await axios.get<GlyphsResponse>(
+    const response = await axios.get<Glyph[]>(
       `${process.env.API_BASE_URL}/quran/verses/code_v1`,
       {
         params: { chapter_number: chapterNumber },

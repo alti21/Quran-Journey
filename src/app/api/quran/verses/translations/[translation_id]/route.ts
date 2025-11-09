@@ -1,13 +1,5 @@
 import axios from "axios";
-
-type Translation = {
-  resource_id: number;
-  text: string;
-};
-
-type TranslationResponse = {
-  translations: Translation[];
-}
+import type { Translation } from "@/types/quran";
 
 /**
 * Fetch traslations for translation ID 85
@@ -26,7 +18,7 @@ export async function GET(request: Request) {
     
     const { access_token } = await tokenRes.json();
 
-    const response = await axios.get<TranslationResponse>(
+    const response = await axios.get<Translation[]>(
       `${process.env.API_BASE_URL}/quran/translations/85`,
       {
         params: { chapter_number: chapterNumber },

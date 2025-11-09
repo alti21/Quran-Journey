@@ -1,15 +1,8 @@
 import OpenAI from "openai";
 import axios from "axios";
+import { VerseResponse } from "@/types/quran";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-type VerseResponse = {
-  verse: {
-    verse_key: string;
-    text_uthmani: string;
-    translations?: { text: string }[];
-  };
-};
 
 /**
 * Fetch AI-generated reflection prompt using OpenAI API

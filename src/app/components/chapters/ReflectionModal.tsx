@@ -1,12 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useCallback } from "react";
-
-type SavedReflection = {
-  date: string;
-  verseKey: string;
-  verse: string;
-  userReflection: string;
-};
+import { SavedReflection } from "@/types/quran";
 
 type Props = {
   savedReflections: SavedReflection[];

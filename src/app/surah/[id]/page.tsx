@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState} from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import SurahHeader from "@/app/components/surah/SurahHeader";
@@ -9,27 +9,7 @@ import Verse from "@/app/components/surah/Verse";
 import NavButton from "@/app/components/utils/NavButton";
 import Error from "@/app/components/utils/Error";
 import loadQCFPageFont from "@/app/utils/loadQCFPageFont";
-
-type Surah = {
-  id: number;
-  name_simple: string;
-  name_arabic: string;
-  revelation_place: string;
-  verses_count: number;
-  translated_name: { name: string };
-}
-
-type Glyph = {
-  id: number;
-  verse_key: string;
-  code_v1: string;
-  v1_page: number;
-};
-
-type Translation = {
-  resource_id: number;
-  text: string;
-};
+import type { Surah, Glyph, Translation } from "@/types/quran";
 
 export default function SurahPage() {
   const { id } = useParams();

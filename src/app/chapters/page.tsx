@@ -7,32 +7,10 @@ import ReflectionModal from "@/app/components/chapters/ReflectionModal";
 import ReflectionSection from "../components/chapters/ReflectionSection";
 import AppHeader from "../components/chapters/AppHeader";
 import SurahGrid from "../components/chapters/SurahGrid";
-
-type Chapter = {
-  id: number;
-  name_simple: string;
-  name_arabic: string;
-  revelation_place: string;
-  verses_count: number;
-  translated_name: { name: string };
-};
-
-type ReflectionVerse = {
-  verse_key: string;
-  verseText: string;
-  translation: string;
-  reflectionPrompt: string;
-};
-
-type SavedReflection = {
-  date: string;
-  verseKey: string;
-  verse: string;
-  userReflection: string;
-};
+import type { Surah, ReflectionVerse, SavedReflection } from "@/types/quran";
 
 export default function ChaptersPage() {
-  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [chapters, setChapters] = useState<Surah[]>([]);
   const [reflectionVerse, setReflectionVerse] = useState<ReflectionVerse | null>(null);
   const [reflection, setReflection] = useState("");
   const [saved, setSaved] = useState(false);

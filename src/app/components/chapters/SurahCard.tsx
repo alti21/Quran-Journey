@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 import Link from "next/link";
-
-type Props = {
-  id: number;
-  name_simple: string;
-  name_arabic: string;
-  translated_name: string;
-  revelation_place: string;
-  verses_count: number;
-};
+import { Surah } from "@/types/quran";
 
 function SurahCard({
   id,
@@ -17,7 +9,7 @@ function SurahCard({
   translated_name,
   revelation_place,
   verses_count
-}: Props) {
+}: Surah) {
   return (
     <li className="group bg-gradient-to-br from-white to-emerald-50 border border-emerald-100 rounded-2xl shadow-sm hover:shadow-md transition-all hover:scale-[1.02]">
       <Link href={`/surah/${id}`} 
@@ -34,7 +26,7 @@ function SurahCard({
         </div>
 
         <p className="text-gray-600 text-sm italic mb-2">
-          {translated_name}
+          {translated_name.name}
         </p>
 
         <div className="text-xs text-gray-500 flex justify-between">
