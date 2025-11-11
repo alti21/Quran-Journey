@@ -18,6 +18,7 @@ export default function SurahPage() {
   const [surah, setSurah] = useState<Surah | null>(null);
   const [glyphs, setGlyphs] = useState<Glyph[]>([]);
   const [translation, setTranslation] = useState<Translation[]>([]);
+  const [fontMap, setFontMap] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,13 +38,33 @@ export default function SurahPage() {
         setTranslation(translationRes.data.translations);
       } catch (error: any) {
         setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+      } 
     }
 
     fetchSurah();
   }, [id]);
+
+  useEffect(() => {
+    if (glyphs.length === 0) return;
+
+    async function loadFonts() {
+      const map: Record<number, string> = {};
+      const pageNumbers = [...new Set(glyphs.map(v => v.v1_page))];
+
+      // Wait for all fonts to load
+      await Promise.all(
+        pageNumbers.map(async (page) => {
+          const fontName = await loadQCFPageFont(page);
+          map[page] = fontName;
+        })
+      );
+
+      setFontMap(map);
+      setLoading(false);
+    }
+
+    loadFonts();
+  }, [glyphs]);
 
   if (error) return <Error error={error} />
   
@@ -65,7 +86,7 @@ export default function SurahPage() {
               key={glyph.id}
               verse={glyph.code_v1}
               translation={translation[index]?.text}
-              fontFamily={loadQCFPageFont(glyph.v1_page)}
+              fontFamily={fontMap[glyph.v1_page]}
             />
           ))}
         </div>
