@@ -4,8 +4,8 @@ import type { Surah } from "@/types/quran";
 /**
 * Fetch Surah (chapter) details by ID
 */
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(req: Request, context: { params: { id: string } }) {
+  const { id } = context.params;
 
   if (!id) {
     return new Response("Missing surah ID", { status: 400 });
