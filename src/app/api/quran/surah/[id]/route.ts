@@ -6,9 +6,7 @@ import { getAccessToken } from "@/lib/quranAuth";
 * Fetch Surah (chapter) details by ID
 */
 export async function GET(req: Request) {
-  //const { id } = context.params;
   const id = req.url.split("/").pop();
-  console.log("id is", id);
 
   if (!id) {
     return new Response("Missing surah ID", { status: 400 });

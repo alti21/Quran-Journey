@@ -2,14 +2,13 @@ import axios from "axios";
 import { TokenResponse } from "@/types/quran";
 
 let cachedToken: string | null = null;
-let tokenExpiry = 0; // timestamp (ms)
+let tokenExpiry = 0;
 
 export async function getAccessToken() {
   const now = Date.now();
 
-  // If token exists and not expired → return it
+  // get token if it already exists and isn't expired
   if (cachedToken && now < tokenExpiry) {
-    console.log("getting old token");
     return cachedToken;
   }
 
@@ -40,6 +39,5 @@ export async function getAccessToken() {
   cachedToken = token;
   tokenExpiry = now + expiresIn * 1000;
 
-  console.log("🔐 New access token fetched");
   return token;
 }

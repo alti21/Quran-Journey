@@ -15,11 +15,9 @@ export default function loadQCFPageFont(page: number | undefined): Promise<strin
     fontFace.load()
       .then((loadedFont) => {
         document.fonts.add(loadedFont);
-        console.log(`Loaded QCF font for page ${page}`);
         resolve(fontName);
       })
       .catch((err) => {
-        console.error(`Failed to load QCF font ${fontUrl}:`, err);
         resolve(""); // resolve anyway to avoid blocking
       });
   });
