@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Surah } from "@/types/quran";
+import { getAccessToken } from "@/lib/quranAuth";
 
 /**
 * Fetch Surah (chapter) details by ID
@@ -14,9 +15,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const tokenRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/quran/token`);
-    if (!tokenRes.ok) throw new Error("Failed to get token");
-    const { access_token } = await tokenRes.json();
+    const access_token = await getAccessToken();
 
     const response = await axios.get<Surah>(
       `${process.env.API_BASE_URL}/chapters/${id}`,

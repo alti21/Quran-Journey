@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Translation } from "@/types/quran";
+import { getAccessToken } from "@/lib/quranAuth";
 
 /**
 * Fetch traslations for translation ID 85
@@ -13,10 +14,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const tokenRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/quran/token`);
-    if (!tokenRes.ok) throw new Error("Failed to get access token");
-    
-    const { access_token } = await tokenRes.json();
+    const access_token = await getAccessToken();
 
     const response = await axios.get<Translation[]>(
       `${process.env.API_BASE_URL}/quran/translations/85`,

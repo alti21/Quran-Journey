@@ -45,4 +45,5 @@ export type SavedReflection = {
 
 export type TokenResponse = {
   access_token: string;
+  expires_in: Number;
 };

@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import axios from "axios";
 import { VerseResponse } from "@/types/quran";
+import { getAccessToken } from "@/lib/quranAuth";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -9,9 +10,7 @@ const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 */
 export async function GET() {
   try {
-    const tokenRes = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/quran/token`);
-    if (!tokenRes.ok) throw new Error("Failed to get access token");
-    const { access_token } = await tokenRes.json();
+    const access_token = await getAccessToken();
 
     const response = await axios.get<VerseResponse>(
       `${process.env.API_BASE_URL}/verses/random`,
